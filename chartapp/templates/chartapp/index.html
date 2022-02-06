@@ -1,0 +1,80 @@
+{% extends 'partials/base.html' %}
+
+{% block content %}
+    <h1 class="text-center">Django Blockchain Chart</h1>
+
+    <div class="row mt-5">
+        <div class="chartBox">
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="chartBox">
+            <canvas id="lineChart"></canvas>
+        </div>
+        <div class="chartBox">
+            <canvas id="pieChart"></canvas>
+        </div>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const data = {
+                labels: [{% for item in query_results %} '{{ item.address }}', {% endfor %}],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [{% for item in query_results %} {{ item.balance }}, {% endfor %}],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+            const config = {
+                type: 'line',
+                data,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+            const myChart = new Chart(document.getElementById('myChart'), config);
+            const config2 = {
+                type: 'bar',
+                data,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+            const lineChart = new Chart(document.getElementById('lineChart'), config2);
+            const config3 = {
+                type: 'doughnut',
+                data,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+            const pieChart = new Chart(document.getElementById('pieChart'), config3);
+        </script>
+    </div>
+{% endblock %}
